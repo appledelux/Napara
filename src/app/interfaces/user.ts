@@ -3,9 +3,9 @@ export interface User {
     subnick?: string;
     age?: number;
     email: string;
-    friend: boolean;
+    friend?: boolean;
     uid: any;
-    status: status;
+    status?: status;
 }
 
 export type status = 'online' | 'offline' | 'busy' | 'away';
