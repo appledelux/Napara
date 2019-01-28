@@ -1,0 +1,33 @@
+#logo-status {
+    width: 15px;
+    height: 15px;
+}
+
+#home-container {
+    background-image: url('/assets/img/msnbg.jpg');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+#white-border-glass-box {
+    border: 2px solid rgba(255,255,255, .75);
+    padding: 8px;
+}
+
+.home-head-container {
+    background-color: rgba(255,255,255, .50)
+}
+
+#home-avatar-picture {
+    max-width: 100px;
+}
+
+.white-container-padded {
+    padding: 15px;
+    background-color: #feffff;
+}
+
+img.icon {
+    width: 30px;
+}
+
