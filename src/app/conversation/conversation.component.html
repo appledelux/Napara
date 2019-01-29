@@ -1,3 +1,52 @@
-<p>
-  {{friend | json}}
-</p>
+<div class="conversation-container blue-white-bg">
+  <div class="row">
+    <div class="col-sm-3 maxwi300">
+      <div id="conversation-sidebar">
+        <div class="vh30">
+          <div class="avatar-frame-online">
+            <img src="{{'assets/img/generic_avatar.png'}}" class="avatar-image img-fluid">
+          </div>
+        </div>
+        <div class="vh30"></div>
+        <div class="vh25">
+          <div class="avatar-frame-online">
+            <img src="{{'assets/img/generic_avatar.png'}}" class="avatar-image img-fluid">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-9">
+      <br />
+      <span class="friend-name">Amigo 1</span> (online)
+      <hr />
+      <div class="vh55 over-scroll pabo10" id="message-area">
+        <div class="message-group" *ngFor="let m of listConversation">
+          <b>{{getUserNickById(m.sender)}}</b> dice: <br />
+          <span>{{m.text}}</span>
+        </div>
+      </div>
+      <div class="message-controls-container">
+        <textarea [(ngModel)]="textMessage" (keyup.enter)="sendMessage()" class="form-control" cols="30" rows="5"></textarea>
+        <div id="message-toolbar">
+          <div class="item">
+            <img src="assets/img/regular_smile.gif" class="tool">
+            <i name="caret-down"></i>
+          </div>
+          <div class="item">
+            <img src="assets/img/wink_smile.gif" class="tool">
+            <i name="caret-down"></i>
+          </div>
+          <div class="item">
+            <img src="assets/img/zumbido.png" class="tool">
+          </div>
+
+          <a class="btn btn-primary btn-sm marri10" accept="image/*">Enviar</a>
+          <label class="custom-file-upload">
+            <input type="file">
+            <i name="image"></i> Seleccionar Imagen
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -6,6 +6,7 @@ export interface User {
     friend?: boolean;
     uid: any;
     status?: status;
+    avatar?: string;
 }
 
 export type status = 'online' | 'offline' | 'busy' | 'away';

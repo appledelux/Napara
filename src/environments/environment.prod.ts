@@ -5,7 +5,7 @@ export const environment = {
     authDomain: 'napara-a0ed3.firebaseapp.com',
     databaseURL: 'https://napara-a0ed3.firebaseio.com',
     projectId: 'napara-a0ed3',
-    storageBucket: '',
+    storageBucket: 'napara-a0ed3.appspot.com',
     messagingSenderId: '48036704415'
   }
 };
