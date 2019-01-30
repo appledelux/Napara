@@ -67,11 +67,5 @@ fileChangeEvent(event: any): void {
 imageCropped(event: ImageCroppedEvent) {
   this.croppedImage = event.base64;
 }
-imageLoaded() {
-  // show cropper
-}
-loadImageFailed() {
-  // show message
-}
 
 }

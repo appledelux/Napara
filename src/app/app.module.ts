@@ -11,7 +11,7 @@ import { MenuComponent } from './menu/menu.component';
 import { SearchPipe } from './pipes/search.pipe';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../environments/environment.prod';
-import { AngularFireModule, FirebaseStorage } from '@angular/fire';
+import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
@@ -20,6 +20,7 @@ import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { AuthGuard } from './services/auth.guard';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -48,7 +49,8 @@ const appRoutes: Routes = [
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     FormsModule,
-    ImageCropperModule
+    ImageCropperModule,
+    NgbModule.forRoot(),
   ],
   providers: [AuthService, UserService],
   bootstrap: [AppComponent]

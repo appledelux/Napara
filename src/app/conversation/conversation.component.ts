@@ -4,6 +4,8 @@ import { User } from '../interfaces/user';
 import { UserService } from '../services/user.service';
 import { ConversationService } from '../services/conversation.service';
 import { AuthService } from '../services/auth.service';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-conversation',
@@ -18,10 +20,17 @@ export class ConversationComponent implements OnInit {
   conversation_id: string;
   textMessage: string;
   listConversation: any;
+  flagShake: boolean = false;
+  croppedImage: any;
+  pictureMessage: any;
+  showModal: boolean;
+  inputImage: any;
+  imageChangedEvent: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private conversationService: ConversationService,
+    private angularFireStorage: AngularFireStorage,
     private userService: UserService) {
     this.friendId = this.activatedRoute.snapshot.params['uid'];
     this.getUserAndFriend();
@@ -57,14 +66,40 @@ export class ConversationComponent implements OnInit {
       timestamp: Date.now(),
       text: this.textMessage,
       receiver: this.friend.uid,
-      sender: this.user.uid
+      sender: this.user.uid,
+      type: 'text'
     };
     this.conversationService.createConversation(message)
       .then(() => {
-        alert('Mensaje creado con exito');
         this.textMessage = '';
       })
       .catch(err => console.log(err));
+  }
+
+  sendZumbido() {
+    const message = {
+      uid: this.conversation_id,
+      timestamp: Date.now(),
+      text: null,
+      receiver: this.friend.uid,
+      sender: this.user.uid,
+      type: 'zumbido'
+    };
+    this.conversationService.createConversation(message)
+      .then(() => {
+
+      })
+      .catch(err => console.log(err));
+    this.doZumbido();
+  }
+
+  doZumbido() {
+    const audio = new Audio(`assets/sound/zumbido.m4a`);
+    audio.play();
+    this.flagShake = true;
+    window.setTimeout(() => {
+      this.flagShake = false;
+    }, 1000);
   }
 
   getConversation() {
@@ -75,8 +110,13 @@ export class ConversationComponent implements OnInit {
           if (!message.seen) {
             message.seen = true;
             this.conversationService.editConversation(message);
-            const audio = new Audio(`assets/sound/new_message.m4a`);
-            audio.play();
+            if (message.type == 'text') {
+              const audio = new Audio(`assets/sound/new_message.m4a`);
+              audio.play();
+            } else if (message.type = 'zumbido') {
+              this.doZumbido();
+            }
+
           }
         });
       },
@@ -89,6 +129,44 @@ export class ConversationComponent implements OnInit {
     } else {
       return this.user.nick;
     }
+  }
+
+  sendImage() {
+    const currentImageId = Date.now();
+    try {
+      this.angularFireStorage.ref(`messagesPictures/${currentImageId}|${this.conversation_id}.jpg`)
+        .putString(this.croppedImage, 'data_url');
+      this.pictureMessage = this.angularFireStorage.ref(`messagesPictures/${currentImageId}|${this.conversation_id}.jpg`).getDownloadURL()
+    } catch (error) {
+      console.log(error);
+    }
+
+    this.pictureMessage.subscribe(async url => {
+      const message = {
+        uid: this.conversation_id,
+        timestamp: Date.now(),
+        text: url,
+        sender: this.user.uid,
+        receiver: this.friendId,
+        type: 'image'
+      };
+
+      try {
+        this.conversationService.createConversation(message);
+        this.showModal = false;
+        this.croppedImage = '';
+        this.inputImage.nativeElement.value = '';
+      } catch (err) {
+        console.log(err);
+      }
+    });
+  }
+
+  fileChangeEvent(event: any): void {
+    this.imageChangedEvent = event;
+  }
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event.base64;
   }
 
 }

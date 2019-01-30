@@ -3,29 +3,34 @@
     <div class="col-sm-3 maxwi300">
       <div id="conversation-sidebar">
         <div class="vh30">
-          <div class="avatar-frame-online">
-            <img src="{{'assets/img/generic_avatar.png'}}" class="avatar-image img-fluid">
+          <div *ngIf="friend" class="avatar-frame-online">
+            <img [src]="friend.avatar || 'assets/img/generic_avatar.png'" class="avatar-image img-fluid">
           </div>
         </div>
         <div class="vh30"></div>
         <div class="vh25">
-          <div class="avatar-frame-online">
-            <img src="{{'assets/img/generic_avatar.png'}}" class="avatar-image img-fluid">
+          <div *ngIf="user" class="avatar-frame-online">
+            <img [src]="croppedImage || user.avatar || 'assets/img/generic_avatar.png'" class="avatar-image img-fluid">
           </div>
         </div>
       </div>
     </div>
     <div class="col-sm-9">
       <br />
-      <span class="friend-name">Amigo 1</span> (online)
+      <span class="friend-name">{{friend.nick}}</span> (online)
       <hr />
       <div class="vh55 over-scroll pabo10" id="message-area">
         <div class="message-group" *ngFor="let m of listConversation">
           <b>{{getUserNickById(m.sender)}}</b> dice: <br />
           <span>{{m.text}}</span>
+          <div class="imagen-enviada" *ngIf="m.url">
+            <img [src]="m.url " class="avatar-image img-fluid" alt="">
+          </div>
         </div>
       </div>
       <div class="message-controls-container">
+        <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="1 / 1"
+          [resizeToWidth]="128" format="png" (imageCropped)="imageCropped($event)"></image-cropper>
         <textarea [(ngModel)]="textMessage" (keyup.enter)="sendMessage()" class="form-control" cols="30" rows="5"></textarea>
         <div id="message-toolbar">
           <div class="item">
@@ -36,13 +41,13 @@
             <img src="assets/img/wink_smile.gif" class="tool">
             <i name="caret-down"></i>
           </div>
-          <div class="item">
+          <div (click)="doZumbido()" class="item">
             <img src="assets/img/zumbido.png" class="tool">
           </div>
 
-          <a class="btn btn-primary btn-sm marri10" accept="image/*">Enviar</a>
+          <a (click)="sendImage()" class="btn btn-primary btn-sm marri10" accept="image/*">Enviar</a>
           <label class="custom-file-upload">
-            <input type="file">
+            <input (change)="fileChangeEvent($event)" type="file">
             <i name="image"></i> Seleccionar Imagen
           </label>
         </div>
